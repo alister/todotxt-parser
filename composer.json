@@ -1,0 +1,93 @@
+{
+  "name": "alister/todotxt-parser",
+  "type": "library",
+  "description": "parser for the TodoTxt format",
+  "keywords": [
+    "todotxt",
+    "parser"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Alister Bulman",
+      "email": "abulman@gmail.com",
+      "homepage": "https://abulman.co.uk/"
+    }
+  ],
+  "require": {
+    "php": "^7.4"
+  },
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.6.2",
+    "ergebnis/composer-normalize": "^2.5",
+    "hamcrest/hamcrest-php": "^2",
+    "mockery/mockery": "^1.3",
+    "php-parallel-lint/php-parallel-lint": "^1.2",
+    "phpstan/extension-installer": "^1",
+    "phpstan/phpstan": "^0.12.25",
+    "phpstan/phpstan-mockery": "^0.12.5",
+    "phpstan/phpstan-phpunit": "^0.12.8",
+    "phpunit/phpunit": "^9.1",
+    "psy/psysh": "^0.10.4",
+    "slevomat/coding-standard": "^6.3",
+    "squizlabs/php_codesniffer": "^3.5",
+    "vimeo/psalm": "^3.11"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "autoload": {
+    "psr-4": {
+      "Alister\\Todotxt\\Parser\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Alister\\Console\\": "resources/console/",
+      "Alister\\Test\\Todotxt\\Parser\\": "tests/"
+    },
+    "files": [
+      "vendor/hamcrest/hamcrest-php/hamcrest/Hamcrest.php"
+    ]
+  },
+  "scripts": {
+    "td:analyze": [
+      "@td:analyze:phpstan",
+      "@td:analyze:psalm"
+    ],
+    "td:analyze:phpstan": "phpstan analyse --no-progress",
+    "td:analyze:psalm": "psalm --diff --diff-methods --show-info=true --config=psalm.xml",
+    "td:build:clean": "git clean -fX build/.",
+    "td:build:clear-cache": "git clean -fX build/cache/.",
+    "td:lint": [
+      "parallel-lint src tests",
+      "phpcs --cache=build/cache/phpcs.cache"
+    ],
+    "td:lint:fix": "./bin/lint-fix.sh",
+    "td:repl": [
+      "echo ; echo 'Type ./bin/repl to start the REPL.'"
+    ],
+    "td:test": "phpunit",
+    "td:test:all": [
+      "@td:lint",
+      "@td:analyze",
+      "@td:test"
+    ],
+    "td:test:coverage:ci": "phpunit --coverage-clover build/logs/clover.xml",
+    "td:test:coverage:html": "phpunit --coverage-html build/coverage"
+  },
+  "scripts-descriptions": {
+    "td:analyze": "Performs static analysis on the code base.",
+    "td:analyze:phpstan": "Runs the PHPStan static analyzer.",
+    "td:analyze:psalm": "Runs the Psalm static analyzer.",
+    "td:build:clean": "Removes everything not under version control from the build directory.",
+    "td:build:clear-cache": "Removes everything not under version control from build/cache/.",
+    "td:lint": "Checks all source code for coding standards issues.",
+    "td:lint:fix": "Checks source code for coding standards issues and fixes them, if possible.",
+    "td:repl": "Note: Use ./bin/repl to run the REPL.",
+    "td:test": "Runs the full unit test suite.",
+    "td:test:all": "Runs linting, static analysis, and unit tests.",
+    "td:test:coverage:ci": "Runs the unit test suite and generates a Clover coverage report.",
+    "td:test:coverage:html": "Runs the unit tests suite and generates an HTML coverage report."
+  }
+}
