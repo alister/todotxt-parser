@@ -31,7 +31,7 @@
     "psy/psysh": "^0.10.4",
     "slevomat/coding-standard": "^6.3",
     "squizlabs/php_codesniffer": "^3.5",
-    "vimeo/psalm": "^3.11"
+    "vimeo/psalm": "^4.2"
   },
   "config": {
     "sort-packages": true
@@ -56,7 +56,7 @@
       "@td:analyze:psalm"
     ],
     "td:analyze:phpstan": "phpstan analyse --no-progress",
-    "td:analyze:psalm": "psalm --diff --diff-methods --show-info=true --config=psalm.xml",
+    "td:analyze:psalm": "psalm --diff --show-info=true --config=psalm.xml",
     "td:build:clean": "git clean -fX build/.",
     "td:build:clear-cache": "git clean -fX build/cache/.",
     "td:lint": [
