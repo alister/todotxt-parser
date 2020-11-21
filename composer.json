@@ -74,7 +74,8 @@
       "@td:test"
     ],
     "td:test:coverage:ci": "phpunit --coverage-clover build/logs/clover.xml",
-    "td:test:coverage:html": "phpunit --coverage-html build/coverage"
+    "td:test:coverage:html": "phpunit --coverage-html build/coverage",
+    "td:test:coverage:text": "phpunit --coverage-text"
   },
   "scripts-descriptions": {
     "td:analyze": "Performs static analysis on the code base.",
@@ -88,6 +89,7 @@
     "td:test": "Runs the full unit test suite.",
     "td:test:all": "Runs linting, static analysis, and unit tests.",
     "td:test:coverage:ci": "Runs the unit test suite and generates a Clover coverage report.",
-    "td:test:coverage:html": "Runs the unit tests suite and generates an HTML coverage report."
+    "td:test:coverage:html": "Runs the unit tests suite and generates an HTML coverage report.",
+    "td:test:coverage:text": "Runs the unit tests suite and generates an HTML coverage report."
   }
 }
