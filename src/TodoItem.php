@@ -13,6 +13,18 @@ class TodoItem
     private ?DateTimeInterface $created;
     private ?DateTimeInterface $completion;
     private bool $done;
+    /**
+     * Holding +the +project +tags, if there are any in the text
+     *
+     * @var string[]
+     */
+    private array $tags = [];
+    /**
+     * Holding the @context tags, if there are any in the text
+     *
+     * @var string[]
+     */
+    private array $context = [];
 
     public function __construct(
         string $text,
@@ -26,6 +38,9 @@ class TodoItem
         $this->text = $text;
         $this->completion = $completion;
         $this->done = $done;
+
+        $this->parseTags($text);
+        $this->parseContext($text);
     }
 
     public function getText(): string
@@ -51,5 +66,53 @@ class TodoItem
     public function isDone(): bool
     {
         return $this->done;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getTags(): array
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getContext(): array
+    {
+        return $this->context;
+    }
+
+    private function parseTags(string $text): void
+    {
+        $this->tags = $this->collectByPrefix('+', $text);
+    }
+
+    private function parseContext(string $text): void
+    {
+        $this->context = $this->collectByPrefix('@', $text);
+    }
+
+    /**
+     * @return string[] prefixed word
+     */
+    private function collectByPrefix(string $prefixChar, string $text): array
+    {
+        $items = [];
+
+        if (!str_contains($text, $prefixChar)) {
+            return [];
+        }
+
+        $words = explode(' ', $text);
+        foreach ($words as $word) {
+            $word = trim($word);
+            if ($word[0] === $prefixChar) {
+                $items[] = trim($word, $prefixChar);
+            }
+        }
+
+        return $items;
     }
 }

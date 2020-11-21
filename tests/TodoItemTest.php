@@ -44,7 +44,7 @@ class TodoItemTest extends TestCase
         $this->assertTrue($todoItem->isDone());
     }
 
-    public function testTodoItem2(): void
+    public function testTodoItemNotDone(): void
     {
         $created = new DateTime('2020-12-31');
         $todoItem = new TodoItem('text', 'A', $created, null, false);
@@ -56,6 +56,19 @@ class TodoItemTest extends TestCase
         $this->assertSame($todoItem->getCreated(), $created);
         $this->assertNull($todoItem->getCompletion());
         $this->assertFalse($todoItem->isDone());
+    }
+
+    public function testTodoItemProjectTags(): void
+    {
+        $text = 'text +tag @context';
+        $todoItem = new TodoItem($text);
+
+        $this->assertInstanceOf(TodoItem::class, $todoItem);
+        $this->assertSame($todoItem->getText(), $text);
+
+        // $this->markTestIncomplete('Not yet collecting +tag or @context');
+        // $this->assertEquals($todoItem->getTags(), ['+tag']);
+        // $this->assertEquals($todoItem->getContext(), ['@context']);
     }
 
     /**
