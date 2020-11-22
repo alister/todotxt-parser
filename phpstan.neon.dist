@@ -6,3 +6,6 @@ parameters:
         - ./src
         - ./tests
         - ./resources/console
+    reportUnmatchedIgnoredErrors: false
+    excludes_analyse:
+        - src/TodotxtBundle.php

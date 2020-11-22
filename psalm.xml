@@ -11,7 +11,7 @@
         <directory name="./resources/console"/>
         <ignoreFiles>
             <directory name="./tests"/>
+            <file name="src/TodotxtBundle.php"/>
         </ignoreFiles>
     </projectFiles>
-
 </psalm>

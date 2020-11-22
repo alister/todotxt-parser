@@ -16,5 +16,8 @@
         <include>
             <directory suffix=".php">./src</directory>
         </include>
+        <exclude>
+            <file>src/TodotxtBundle.php</file>
+        </exclude>
     </coverage>
 </phpunit>
