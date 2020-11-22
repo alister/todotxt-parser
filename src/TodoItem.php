@@ -18,13 +18,13 @@ class TodoItem
      *
      * @var string[]
      */
-    private array $tags = [];
+    private array $tags;
     /**
      * Holding the @context tags, if there are any in the text
      *
      * @var string[]
      */
-    private array $context = [];
+    private array $context;
 
     public function __construct(
         string $text,
@@ -69,7 +69,7 @@ class TodoItem
     }
 
     /**
-     * @return string[]
+     * @return array<array-key, string>
      */
     public function getTags(): array
     {
@@ -77,7 +77,7 @@ class TodoItem
     }
 
     /**
-     * @return string[]
+     * @return array<array-key, string>
      */
     public function getContext(): array
     {
@@ -108,7 +108,7 @@ class TodoItem
         $words = explode(' ', $text);
         foreach ($words as $word) {
             $word = trim($word);
-            if ($word[0] === $prefixChar) {
+            if (isset($word[0]) && $word[0] === $prefixChar) {
                 $items[] = trim($word, $prefixChar);
             }
         }

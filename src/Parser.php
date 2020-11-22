@@ -117,7 +117,7 @@ class Parser
         }
 
         $date = new DateTimeImmutable($match[0]);
-        $this->setTodo(substr($this->todoLine, 11));   // length of 'yyyy-mm-dd '
+        $this->setTodo(substr($this->todoLine, 10));   // length of 'yyyy-mm-dd'
 
         return $date;
     }
