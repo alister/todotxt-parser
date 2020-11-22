@@ -68,17 +68,19 @@ class TodoItemTest extends TestCase
     /**
      * @throws UnknownPriorityValue
      */
-    public function testTodoItemProjectTags(): void
+    public function testTodoItemProjectTagsUniquePerTag(): void
     {
-        $text = 'text +tag @context';
+        $text = 'text +tag @context +tag @context +tag @context +tag @context';
         $todoItem = new TodoItem($text);
 
         $this->assertInstanceOf(TodoItem::class, $todoItem);
         $this->assertSame($todoItem->getText(), $text);
 
-        // $this->markTestIncomplete('Not yet collecting +tag or @context');
-        // $this->assertEquals($todoItem->getTags(), ['+tag']);
-        // $this->assertEquals($todoItem->getContext(), ['@context']);
+        $this->assertCount(1, $todoItem->getTags());
+        $this->assertEquals(['tag'], $todoItem->getTags());
+
+        $this->assertCount(1, $todoItem->getContext());
+        $this->assertEquals(['context'], $todoItem->getContext());
     }
 
     /**

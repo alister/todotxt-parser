@@ -109,7 +109,7 @@ class TodoItem
             return [];
         }
 
-        $words = explode(' ', $text);
+        $words = array_unique(explode(' ', $text));
         foreach ($words as $word) {
             $word = trim($word);
             if (isset($word[0]) && $word[0] === $prefixChar) {

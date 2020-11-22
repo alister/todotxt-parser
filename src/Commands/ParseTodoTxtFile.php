@@ -8,6 +8,7 @@ namespace Alister\Todotxt\Parser\Commands;
 
 use Alister\Todotxt\Parser\Exceptions\UnknownPriorityValue;
 use Alister\Todotxt\Parser\Parser;
+use Alister\Todotxt\Parser\TodoCounting;
 use Alister\Todotxt\Parser\TodoItem;
 use Generator;
 use RuntimeException;
@@ -22,10 +23,13 @@ class ParseTodoTxtFile extends Command
     /** @var string */
     protected static $defaultName = 'app:parse-todotxt';
 
-    /** @var array<string, int> */
-    private array $uniqTags = [];
-    /** @var array<string, int> */
-    private array $uniqContexts = [];
+    private TodoCounting $todoCounting;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->todoCounting = new TodoCounting();
+    }
 
     protected function configure(): void
     {
@@ -45,34 +49,14 @@ class ParseTodoTxtFile extends Command
 
         /** @var TodoItem $todoItem */
         foreach ($this->getTodoItem($filename) as $todoItem) {
-            $this->addCountByUniqueTags($todoItem);
-            $this->addCountByUniqueContext($todoItem);
+            $this->todoCounting->addCountByUniqueTags($todoItem);
+            $this->todoCounting->addCountByUniqueContext($todoItem);
         }
 
-        $this->showTopTen($this->uniqTags, 'Project tags', 10, $output);
-        $this->showTopTen($this->uniqContexts, 'Context tags', 10, $output);
+        $this->showTopTen($this->todoCounting->getProjectTagsCount(), 'Project tags', 10, $output);
+        $this->showTopTen($this->todoCounting->getContextTagsCounts(), 'Context tags', 10, $output);
 
         return Command::SUCCESS;
-    }
-
-    private function addCountByUniqueTags(TodoItem $todoItem): void
-    {
-        foreach ($todoItem->getTags() as $tag) {
-            if (!isset($this->uniqTags[$tag])) {
-                $this->uniqTags[$tag] = 0;
-            }
-            $this->uniqTags[$tag] ++;
-        }
-    }
-
-    private function addCountByUniqueContext(TodoItem $todoItem): void
-    {
-        foreach ($todoItem->getContext() as $context) {
-            if (!isset($this->uniqContexts[$context])) {
-                $this->uniqContexts[$context] = 0;
-            }
-            $this->uniqContexts[$context] ++;
-        }
     }
 
     /**
@@ -80,36 +64,12 @@ class ParseTodoTxtFile extends Command
      */
     private function showTopTen(array $tags, string $tagName, int $maxCount, OutputInterface $output): void
     {
-        $displayTag = $this->collectTopN($tags, $maxCount);
-
         $table = new Table($output);
         $table->setStyle('borderless');
 
         $table->setHeaders([$tagName, 'Count']);
-        $table->setRows($displayTag);
+        $table->setRows($this->todoCounting->collectTopN($tags, $maxCount));
         $table->render();
-    }
-
-    /**
-     * @param array<string,int> $tags
-     *
-     * @return array<int, array<string,int|string>>
-     */
-    private function collectTopN(array $tags, int $maxCount): array
-    {
-        $i = 0;
-        $displayTag = [];
-
-        arsort($tags);
-        foreach ($tags as $tag => $count) {
-            ++$i;
-            if ($i > $maxCount) {
-                break;
-            }
-            $displayTag[$i] = ['tag name' => $tag, 'count' => $count];
-        }
-
-        return $displayTag;
     }
 
     /**
