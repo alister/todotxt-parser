@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+require __DIR__.'/../vendor/autoload.php';
+
+use Alister\Todotxt\Parser\Commands\ParseTodoTxtFile;
+use Symfony\Component\Console\Application;
+
+$application = new Application('echo', '1.0.0');
+$command = new ParseTodoTxtFile();
+
+$application->add($command);
+
+$application->setDefaultCommand($command->getName(), true);
+$application->run();
