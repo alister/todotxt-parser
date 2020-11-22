@@ -20,8 +20,9 @@
 
 declare(strict_types=1);
 
-namespace Alister\Tests\Todotxt\Parser;
+namespace Alister\Test\Todotxt\Parser;
 
+use Alister\Todotxt\Parser\Exceptions\UnknownPriorityValue;
 use Alister\Todotxt\Parser\Parser;
 use Alister\Todotxt\Parser\TodoItem;
 use DateTimeImmutable;
@@ -34,6 +35,8 @@ class ParserTest extends TestCase
      * @param string[] $tags
      * @param string[] $context
      *
+     * @throws UnknownPriorityValue
+     *
      * @dataProvider dpParseTodoLine
      */
     public function testParse(string $todoText, TodoItem $expectedItem, array $tags = [], array $context = []): void
@@ -43,11 +46,16 @@ class ParserTest extends TestCase
         $this->assertEquals($expectedItem, Parser::create($todoText));
 
         $todoItem = $parser->parse($todoText);
+
+        $this->assertNotNull($todoItem);
         $this->assertEquals($expectedItem, $todoItem);
         $this->assertEquals($tags, $todoItem->getTags());
         $this->assertEquals($context, $todoItem->getContext());
     }
 
+    /**
+     * @throws UnknownPriorityValue
+     */
     public function dpParseTodoLine(): Generator
     {
         $created = new DateTimeImmutable('2020-01-31');

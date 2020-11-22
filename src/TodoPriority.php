@@ -8,13 +8,14 @@ use Alister\Todotxt\Parser\Exceptions\UnknownPriorityValue;
 
 class TodoPriority
 {
-    /**
-     * Allows 'A'-'Z', or '(A)'-'(Z)' all with lower-case.
-     */
+    // Allows 'A'-'Z', or '(A)'-'(Z)' all with lower-case.
     private const VALID_PRIORITIES = '#^\(?([A-Z])\)?$#i';
 
     private string $priority;
 
+    /**
+     * @throws UnknownPriorityValue
+     */
     public function __construct(?string $priority)
     {
         $this->priority = $this->getPriorityOrThrow($priority);
@@ -25,6 +26,9 @@ class TodoPriority
         return $this->priority;
     }
 
+    /**
+     * @throws UnknownPriorityValue
+     */
     private function getPriorityOrThrow(?string $priority): string
     {
         if ($priority === '' || $priority === '()') {

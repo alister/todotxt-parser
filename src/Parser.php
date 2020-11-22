@@ -22,33 +22,45 @@ declare(strict_types=1);
 
 namespace Alister\Todotxt\Parser;
 
+use Alister\Todotxt\Parser\Exceptions\UnknownPriorityValue;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Throwable;
 
 class Parser
 {
     private const REGEX_PRIORITY_MATCH = '#\(([a-zA-Z])\) #';
     private const REGEX_DATES_MATCH = '#(?:(?:19|20)\d\d)-(?:0?[1-9]|1[012])-(?:[12][\d]|3[01]|0?[1-9])#';
     private string $todoLine = '';
-    private string $originalTodoLine = '';
 
     public function __construct()
     {
     }
 
-    public static function create(string $todoLine = ''): TodoItem
+    /**
+     * @throws UnknownPriorityValue
+     */
+    public static function create(string $todoLine = ''): ?TodoItem
     {
         return (new self())->parse($todoLine);
     }
 
-    public function parse(string $todoLine = ''): TodoItem
+    /**
+     * @throws UnknownPriorityValue
+     */
+    public function parse(string $todoLine = ''): ?TodoItem
     {
-        $this->originalTodoLine = $todoLine;
         $this->setTodo($todoLine);
 
         $done = $this->parseDone();
         $priority = $this->parsePriority();
-        [$completion, $created] = $this->parseDates();
+
+        try {
+                [$completion, $created] = $this->parseDates();
+        } catch (Throwable $e) {
+            return null;
+        }
+
         $text = $this->todoLine;
 
         return new TodoItem($text, $priority, $created, $completion, $done);
@@ -109,6 +121,9 @@ class Parser
         return [$completion, $created];
     }
 
+    /**
+     * @throws \Exception
+     */
     private function snipDateFromLine(): ?DateTimeInterface
     {
         $hasDate = (bool) preg_match(self::REGEX_DATES_MATCH, $this->todoLine, $match);

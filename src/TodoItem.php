@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Alister\Todotxt\Parser;
 
+use Alister\Todotxt\Parser\Exceptions\UnknownPriorityValue;
 use DateTimeInterface;
 
 class TodoItem
@@ -26,6 +27,9 @@ class TodoItem
      */
     private array $context;
 
+    /**
+     * @throws UnknownPriorityValue
+     */
     public function __construct(
         string $text,
         string $priority = '',

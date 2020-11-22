@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Alister\Test\Todotxt\Parser;
 
+use Alister\Todotxt\Parser\Exceptions\UnknownPriorityValue;
 use Alister\Todotxt\Parser\TodoItem;
 use Alister\Todotxt\Parser\TodoPriority;
 use DateTime;
@@ -29,6 +30,9 @@ class TodoItemTest extends TestCase
         $this->assertFalse($todoItem->isDone());
     }
 
+    /**
+     * @throws UnknownPriorityValue
+     */
     public function testTodoItemDoneOnDate(): void
     {
         $created = new DateTime('2020-12-31');
@@ -44,6 +48,9 @@ class TodoItemTest extends TestCase
         $this->assertTrue($todoItem->isDone());
     }
 
+    /**
+     * @throws UnknownPriorityValue
+     */
     public function testTodoItemNotDone(): void
     {
         $created = new DateTime('2020-12-31');
@@ -58,6 +65,9 @@ class TodoItemTest extends TestCase
         $this->assertFalse($todoItem->isDone());
     }
 
+    /**
+     * @throws UnknownPriorityValue
+     */
     public function testTodoItemProjectTags(): void
     {
         $text = 'text +tag @context';
@@ -72,6 +82,8 @@ class TodoItemTest extends TestCase
     }
 
     /**
+     * @throws UnknownPriorityValue
+     *
      * @dataProvider dpTodoItemGood
      */
     public function testTodoItemGood(

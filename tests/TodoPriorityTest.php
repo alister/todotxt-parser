@@ -15,6 +15,8 @@ use PHPUnit\Framework\TestCase;
 class TodoPriorityTest extends TestCase
 {
     /**
+     * @throws UnknownPriorityValue
+     *
      * @dataProvider dpPriorityGood
      */
     public function testPriorityGood(?string $priority, string $expectedPriority): void
@@ -40,7 +42,8 @@ class TodoPriorityTest extends TestCase
     public function testPriorityBad(?string $priority): void
     {
         $this->expectException(UnknownPriorityValue::class);
-        $actual = new TodoPriority($priority);
+        /** @noinspection PhpUnusedLocalVariableInspection */
+        $unused = new TodoPriority($priority);
     }
 
     public function dpPriorityBad(): Generator
