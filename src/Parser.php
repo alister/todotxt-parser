@@ -29,7 +29,9 @@ use Throwable;
 
 class Parser
 {
+    // @see https://regex101.com/r/SZr0X5/14
     private const REGEX_PRIORITY_MATCH = '#\(([a-zA-Z])\) #';
+    // @see https://regex101.com/r/SZr0X5/15 matching date-like things (yyyy-mm-dd)
     private const REGEX_DATES_MATCH = '#(?:(?:19|20)\d\d)-(?:0?[1-9]|1[012])-(?:[12][\d]|3[01]|0?[1-9])#';
     private string $todoLine = '';
 

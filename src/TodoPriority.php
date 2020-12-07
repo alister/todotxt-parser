@@ -8,7 +8,7 @@ use Alister\Todotxt\Parser\Exceptions\UnknownPriorityValue;
 
 class TodoPriority
 {
-    // Allows 'A'-'Z', or '(A)'-'(Z)' all with lower-case.
+    // @see https://regex101.com/r/SZr0X5/13 Allows 'A'-'Z', or '(A)'-'(Z)' all with lower-case.
     private const VALID_PRIORITIES = '#^\(?([A-Z])\)?$#i';
 
     private string $priority;
