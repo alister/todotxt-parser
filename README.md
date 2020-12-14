@@ -1,23 +1,20 @@
 # alister/todotxt-parser
 
-<!--
-TODO: Make sure the following URLs are correct and working for your project.
-      Then, remove these comments to display the badges, giving users a quick
-      overview of your package.
 
-[![Source Code][badge-source]][source]
+<!--  [![Source Code][badge-source]][source]-->
 [![Latest Version][badge-release]][packagist]
 [![Software License][badge-license]][license]
 [![PHP Version][badge-php]][php]
 [![Build Status][badge-build]][build]
-[![Coverage Status][badge-coverage]][coverage]
-[![Total Downloads][badge-downloads]][downloads]
+<!--  [![Coverage Status][badge-coverage]][coverage]
+[![Total Downloads][badge-downloads]][downloads]-->
+
 
 [badge-source]: http://img.shields.io/badge/source-alister/todotxt-parser-blue.svg?style=flat-square
 [badge-release]: https://img.shields.io/packagist/v/alister/todotxt-parser.svg?style=flat-square&label=release
 [badge-license]: https://img.shields.io/packagist/l/alister/todotxt-parser.svg?style=flat-square
 [badge-php]: https://img.shields.io/packagist/php-v/alister/todotxt-parser.svg?style=flat-square
-[badge-build]: https://img.shields.io/travis/alister/todotxt-parser/master.svg?style=flat-square
+[badge-build]: https://github.com/alister/todotxt-parser/workflows/Unit%20Tests/badge.svg
 [badge-coverage]: https://img.shields.io/coveralls/github/alister/todotxt-parser/master.svg?style=flat-square
 [badge-downloads]: https://img.shields.io/packagist/dt/alister/todotxt-parser.svg?style=flat-square&colorB=mediumvioletred
 
@@ -28,7 +25,6 @@ TODO: Make sure the following URLs are correct and working for your project.
 [build]: https://travis-ci.org/alister/todotxt-parser
 [coverage]: https://coveralls.io/r/alister/todotxt-parser?branch=master
 [downloads]: https://packagist.org/packages/alister/todotxt-parser
--->
 
 
 parser for the TodoTxt format
