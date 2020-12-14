@@ -15,7 +15,7 @@
     }
   ],
   "require": {
-    "php": "^7.4"
+    "php": "^7.4 || ^8"
   },
   "require-dev": {
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
@@ -34,6 +34,7 @@
     "symfony/console": "^5.1",
     "symfony/filesystem": "^5.1",
     "symfony/framework-bundle": "^5.1",
+    "symplify/easy-ci": "^9.0",
     "vimeo/psalm": "^4.2"
   },
   "config": {
