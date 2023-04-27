@@ -356,7 +356,8 @@
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
 
     <!-- Forbid useless @var for constants -->
-    <rule ref="SlevomatCodingStandard.TypeHints.UselessConstantTypeHint"/>
+    <!-- the `@var TYPE` for a const added by Rector 
+       <rule ref="SlevomatCodingStandard.TypeHints.UselessConstantTypeHint"/>-->
 
     <!-- Forbid spaces around square brackets -->
     <rule ref="Squiz.Arrays.ArrayBracketSpacing"/>

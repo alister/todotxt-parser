@@ -18,12 +18,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ParseTodoTxtFile extends Command
+final class ParseTodoTxtFile extends Command
 {
     /** @var ?string */
     protected static $defaultName = 'app:parse-todotxt';
 
-    private TodoCounting $todoCounting;
+    private readonly TodoCounting $todoCounting;
 
     public function __construct()
     {
@@ -47,10 +47,10 @@ class ParseTodoTxtFile extends Command
         /** @var string $filename */
         $filename = $input->getArgument('filename');
 
-        /** @var TodoItem $todoItem */
-        foreach ($this->getTodoItem($filename) as $todoItem) {
-            $this->todoCounting->addCountByUniqueTags($todoItem);
-            $this->todoCounting->addCountByUniqueContext($todoItem);
+        /** @var TodoItem $generator */
+        foreach ($this->getTodoItem($filename) as $generator) {
+            $this->todoCounting->addCountByUniqueTags($generator);
+            $this->todoCounting->addCountByUniqueContext($generator);
         }
 
         $this->showTopTen($this->todoCounting->getProjectTagsCount(), 'Project tags', 10, $output);
@@ -95,6 +95,7 @@ class ParseTodoTxtFile extends Command
         if (!feof($handle)) {
             echo "Error: unexpected fgets() fail\n";
         }
+
         fclose($handle);
     }
 }

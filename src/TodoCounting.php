@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Alister\Todotxt\Parser;
 
-class TodoCounting
+/**
+ * @see \Alister\Test\Todotxt\Parser\TodoCountingTest
+ */
+final class TodoCounting
 {
     /** @var array<string, int> */
     private array $uniqContexts = [];
+
     /** @var array<string, int> */
     private array $uniqTags = [];
 
@@ -39,7 +43,8 @@ class TodoCounting
             if (!isset($this->uniqContexts[$context])) {
                 $this->uniqContexts[$context] = 0;
             }
-            $this->uniqContexts[$context]++;
+
+            ++$this->uniqContexts[$context];
         }
     }
 
@@ -49,7 +54,8 @@ class TodoCounting
             if (!isset($this->uniqTags[$tag])) {
                 $this->uniqTags[$tag] = 0;
             }
-            $this->uniqTags[$tag]++;
+
+            ++$this->uniqTags[$tag];
         }
     }
 

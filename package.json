@@ -22,7 +22,7 @@
       "json-beautify",
       "addnl"
     ],
-    "composer.json": [
+    "_composer.json": [
       "composer --quiet normalize"
     ],
     "package.json": [

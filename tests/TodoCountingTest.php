@@ -8,20 +8,23 @@ use Alister\Todotxt\Parser\TodoCounting;
 use Alister\Todotxt\Parser\TodoItem;
 use PHPUnit\Framework\TestCase;
 
-class TodoCountingTest extends TestCase
+final class TodoCountingTest extends TestCase
 {
+    /**
+     * @var array<string, int>
+     */
+    private const SAMPLE_TAG_COUNTS = [
+        'tag-a' => 10,
+        'tag-b' => 20,
+        'tag-c' => 30,
+        'tag-d' => 25,
+        'tag-e' => 10,
+    ];
+
     public function testCollectTopN(): void
     {
         $todoCounting = new TodoCounting();
-
-        $tags = [
-            'tag-a' => 10,
-            'tag-b' => 20,
-            'tag-c' => 30,
-            'tag-d' => 25,
-            'tag-e' => 10,
-        ];
-        $actual = $todoCounting->collectTopN($tags, 3);
+        $actual = $todoCounting->collectTopN(self::SAMPLE_TAG_COUNTS, 3);
 
         $expected = [
             ['tag name' => 'tag-c', 'count' => 30,],
@@ -34,13 +37,13 @@ class TodoCountingTest extends TestCase
 
     public function testAddCounts(): void
     {
-        $tItem = new TodoItem('+project @context +project @context hello');
-        $count = new TodoCounting();
+        $todoItem = new TodoItem('+project @context +project @context hello');
+        $todoCounting = new TodoCounting();
 
-        $count->addCountByUniqueContext($tItem);
-        $this->assertSame(['context' => 1], $count->getContextTagsCounts());
+        $todoCounting->addCountByUniqueContext($todoItem);
+        $this->assertSame(['context' => 1], $todoCounting->getContextTagsCounts());
 
-        $count->addCountByUniqueTags($tItem);
-        $this->assertSame(['project' => 1], $count->getProjectTagsCount());
+        $todoCounting->addCountByUniqueTags($todoItem);
+        $this->assertSame(['project' => 1], $todoCounting->getProjectTagsCount());
     }
 }

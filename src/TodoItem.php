@@ -7,41 +7,38 @@ namespace Alister\Todotxt\Parser;
 use Alister\Todotxt\Parser\Exceptions\UnknownPriorityValue;
 use DateTimeInterface;
 
-class TodoItem
+/**
+ * @see \Alister\Test\Todotxt\Parser\TodoItemTest
+ */
+final class TodoItem
 {
-    private string $text;
-    private TodoPriority $priority;
-    private ?DateTimeInterface $created;
-    private ?DateTimeInterface $completion;
-    private bool $done;
+    private readonly TodoPriority $todoPriority;
+
     /**
      * Holding +the +project +tags, if there are any in the text
      *
      * @var string[]
      */
-    private array $tags;
+    private array $tags = [];
+
     /**
      * Holding the @context tags, if there are any in the text
      *
      * @var string[]
      */
-    private array $context;
+    private array $context = [];
 
     /**
      * @throws UnknownPriorityValue
      */
     public function __construct(
-        string $text,
+        private readonly string $text,
         string $priority = '',
-        ?DateTimeInterface $created = null,
-        ?DateTimeInterface $completion = null,
-        bool $done = false
+        private readonly ?DateTimeInterface $created = null,
+        private readonly ?DateTimeInterface $completion = null,
+        private readonly bool $done = false
     ) {
-        $this->priority = new TodoPriority($priority);
-        $this->created = $created;
-        $this->text = $text;
-        $this->completion = $completion;
-        $this->done = $done;
+        $this->todoPriority = new TodoPriority($priority);
 
         $this->parseTags($text);
         $this->parseContext($text);
@@ -54,7 +51,7 @@ class TodoItem
 
     public function getPriority(): TodoPriority
     {
-        return $this->priority;
+        return $this->todoPriority;
     }
 
     public function getCreated(): ?DateTimeInterface
