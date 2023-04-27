@@ -6,11 +6,13 @@ namespace Alister\Todotxt\Parser;
 
 use Alister\Todotxt\Parser\Exceptions\UnknownPriorityValue;
 use DateTimeInterface;
+use JsonSerializable;
+use Stringable;
 
 /**
  * @see \Alister\Test\Todotxt\Parser\TodoItemTest
  */
-final class TodoItem
+final class TodoItem implements Stringable, JsonSerializable
 {
     private readonly TodoPriority $todoPriority;
 
@@ -42,6 +44,85 @@ final class TodoItem
 
         $this->parseTags($text);
         $this->parseContext($text);
+    }
+
+    public function __toString(): string
+    {
+        $arr = array_filter(
+            $this->jsonSerialize(),
+            fn($x): bool => $x !== null && $x !== ''
+        );
+
+        return implode(' ', $arr);
+    }
+
+    /**
+     * @return array<string,string|null>
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'done' => $this->isDone() ? 'x' : null,
+            'priority' => (string) $this->getPriority(),
+            'completion' => $this->isDone() ? $this->getCompletion()?->format('Y-m-d') : null,
+            'created' => $this->getCreated()?->format('Y-m-d'),
+            'text' => $this->getText(),
+        ];
+    }
+
+    public function withText(string $text = ''): self
+    {
+        return new self(
+            text: $text,
+            priority: $this->todoPriority->getPriority(),
+            created: $this->created,
+            completion: $this->completion,
+            done: $this->done
+        );
+    }
+
+    public function withPriority(string $priority = ''): self
+    {
+        return new self(
+            text: $this->text,
+            priority: $priority,
+            created: $this->created,
+            completion: $this->completion,
+            done: $this->done
+        );
+    }
+
+    public function withCreated(?DateTimeInterface $created = null): self
+    {
+        return new self(
+            text: $this->text,
+            priority: $this->todoPriority->getPriority(),
+            created: $created,
+            completion: $this->completion,
+            done: $this->done
+        );
+    }
+
+    public function withCompletion(?DateTimeInterface $completion = null): self
+    {
+        return new self(
+            text: $this->text,
+            priority: $this->todoPriority->getPriority(),
+            created: $this->created,
+            completion: $completion,
+            done: $this->done
+        );
+    }
+
+    public function withDone(bool $done = false): self
+    {
+        return new self(
+            text: $this->text,
+            priority: $this->todoPriority->getPriority(),
+            created: $this->created,
+            completion: $this->completion,
+            done: $done
+        );
     }
 
     public function getText(): string
