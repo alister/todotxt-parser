@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Alister\Todotxt\Parser;
 
 use Alister\Todotxt\Parser\Exceptions\UnknownPriorityValue;
+use Stringable;
 
 /**
  * @see \Alister\Test\Todotxt\Parser\TodoPriorityTest
  */
-final class TodoPriority
+final class TodoPriority implements Stringable
 {
     /**
      * @See https://regex101.com/r/SZr0X5/13 Allows 'A'-'Z', or '(A)'-'(Z)' all with lower-case.
@@ -53,5 +54,14 @@ final class TodoPriority
         }
 
         return strtoupper($matches[1]);
+    }
+
+    public function __toString(): string
+    {
+        if ($this->priority === '') {
+            return '';
+        }
+
+        return '(' . $this->priority . ')';
     }
 }

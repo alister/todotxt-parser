@@ -7,7 +7,7 @@ namespace Alister\Test\Todotxt\Parser;
 use Alister\Todotxt\Parser\Exceptions\UnknownPriorityValue;
 use Alister\Todotxt\Parser\TodoItem;
 use Alister\Todotxt\Parser\TodoPriority;
-use DateTime;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Generator;
 use PHPUnit\Framework\TestCase;
@@ -31,6 +31,8 @@ final class TodoItemTest extends TestCase
         $this->assertNull($todoItem->getCreated());
         $this->assertNull($todoItem->getCompletion());
         $this->assertFalse($todoItem->isDone());
+
+        $this->assertSame('text', (string) $todoItem);
     }
 
     /**
@@ -38,8 +40,9 @@ final class TodoItemTest extends TestCase
      */
     public function testTodoItemDoneOnDate(): void
     {
-        $created = new DateTime('2020-12-31');
-        $completion = new DateTime('2021-01-15');
+        $expected = 'x (A) 2021-01-15 2020-12-31 text';
+        $created = new DateTimeImmutable('2020-12-31');
+        $completion = new DateTimeImmutable('2021-01-15');
         $todoItem = new TodoItem('text', 'A', $created, $completion, true);
 
         $this->assertInstanceOf(TodoItem::class, $todoItem);
@@ -49,6 +52,8 @@ final class TodoItemTest extends TestCase
         $this->assertSame($todoItem->getCreated(), $created);
         $this->assertSame($todoItem->getCompletion(), $completion);
         $this->assertTrue($todoItem->isDone());
+
+        $this->assertSame($expected, (string) $todoItem);
     }
 
     /**
@@ -56,7 +61,8 @@ final class TodoItemTest extends TestCase
      */
     public function testTodoItemNotDone(): void
     {
-        $dateTime = new DateTime('2020-12-31');
+        $expected = '(A) 2020-12-31 text';
+        $dateTime = new DateTimeImmutable('2020-12-31');
         $todoItem = new TodoItem('text', 'A', $dateTime, null, false);
 
         $this->assertInstanceOf(TodoItem::class, $todoItem);
@@ -66,6 +72,8 @@ final class TodoItemTest extends TestCase
         $this->assertSame($todoItem->getCreated(), $dateTime);
         $this->assertNull($todoItem->getCompletion());
         $this->assertFalse($todoItem->isDone());
+
+        $this->assertSame($expected, (string) $todoItem);
     }
 
     /**
@@ -83,6 +91,8 @@ final class TodoItemTest extends TestCase
 
         $this->assertCount(1, $todoItem->getContext());
         $this->assertSame(['context'], $todoItem->getContext());
+
+        $this->assertSame(self::TODO_TEXT, (string) $todoItem);
     }
 
     /**
@@ -99,12 +109,13 @@ final class TodoItemTest extends TestCase
     ): void {
         $todoItem = new TodoItem($text, $priority, $created, $completion, $done);
         $this->assertInstanceOf(TodoItem::class, $todoItem);
+        $this->assertSame($this->dataName(), (string) $todoItem);
     }
 
     public function dpTodoItemGood(): Generator
     {
-        $created = new DateTime('2020-12-31');
-        $completion = new DateTime('2021-01-15');
+        $created = new DateTimeImmutable('2020-12-31');
+        $completion = new DateTimeImmutable('2021-01-15');
 
         yield 'text' => ['text'];
         yield '(A) text' => ['text', 'A'];
@@ -113,5 +124,25 @@ final class TodoItemTest extends TestCase
         yield 'x (A) 2020-12-31 text +tag' => ['text +tag', 'A', $created, true];
         yield 'x (A) 2020-12-31 text +project @context' => ['text +project @context', 'A', $created, true];
         yield 'x (A) 2021-01-15 2020-12-31 text' => ['text', 'A', $created, true, $completion];
+    }
+
+    public function testWithTodoItem(): void
+    {
+        $created = new DateTimeImmutable('2020-12-31');
+        $todoItem = new TodoItem('hello', 'C', $created, $created, false);
+
+        // only the created date - as it's not done.
+        $this->assertSame('(C) 2020-12-31 hello', (string) $todoItem);
+
+        $updated = new DateTimeImmutable('2023-04-27');
+
+        $todoItem2 = $todoItem->withDone(true);
+        $todoItem3 = $todoItem2->withPriority('A');
+        $todoItem4 = $todoItem3->withText('test');
+        $todoItem5 = $todoItem4->withCreated($updated);
+        $todoItem6 = $todoItem5->withCompletion($updated);
+
+        // and now it's totally changed...
+        $this->assertEquals('x (A) 2023-04-27 2023-04-27 test', (string) $todoItem6);
     }
 }
