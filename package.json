@@ -22,7 +22,7 @@
       "json-beautify",
       "addnl"
     ],
-    "composer.json": [
+    "_composer.json": [
       "composer --quiet normalize"
     ],
     "package.json": [
@@ -31,7 +31,7 @@
     "{src,tests}/**/*.php": [
       "composer --quiet td:lint:fix",
       "composer --quiet td:lint",
-      "composer --quiet td:analyze"
+      "composer --quiet td:analyze:phpstan"
     ]
   },
   "config": {

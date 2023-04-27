@@ -27,12 +27,23 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Throwable;
 
-class Parser
+/**
+ * @see \Alister\Test\Todotxt\Parser\ParserTest
+ */
+final class Parser
 {
-    // @see https://regex101.com/r/SZr0X5/14
+    /**
+     * @See https://regex101.com/r/SZr0X5/14
+     * @var string
+     */
     private const REGEX_PRIORITY_MATCH = '#\(([a-zA-Z])\) #';
-    // @see https://regex101.com/r/SZr0X5/15 matching date-like things (yyyy-mm-dd)
+
+    /**
+     * @See https://regex101.com/r/SZr0X5/15 matching date-like things (yyyy-mm-dd)
+     * @var string
+     */
     private const REGEX_DATES_MATCH = '#(?:(?:19|20)\d\d)-(?:0?[1-9]|1[012])-(?:[12][\d]|3[01]|0?[1-9])#';
+
     private string $todoLine = '';
 
     public function __construct()
@@ -59,7 +70,7 @@ class Parser
 
         try {
                 [$completion, $created] = $this->parseDates();
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return null;
         }
 
@@ -100,7 +111,7 @@ class Parser
     }
 
     /**
-     * @return ?DateTimeInterface[]
+     * @return \DateTimeInterface[]
      *
      * @throws \Exception
      *
@@ -113,7 +124,7 @@ class Parser
 
         $completion = null;
         $created = null;
-        if (isset($date1, $date2)) {
+        if (isset($date1) && isset($date2)) {
             $completion = $date1;
             $created = $date2;
         } elseif (isset($date1)) {
@@ -133,9 +144,9 @@ class Parser
             return null;
         }
 
-        $date = new DateTimeImmutable($match[0]);
+        $dateTimeImmutable = new DateTimeImmutable($match[0]);
         $this->setTodo(substr($this->todoLine, 10));   // length of 'yyyy-mm-dd'
 
-        return $date;
+        return $dateTimeImmutable;
     }
 }

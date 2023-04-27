@@ -6,12 +6,18 @@ namespace Alister\Todotxt\Parser;
 
 use Alister\Todotxt\Parser\Exceptions\UnknownPriorityValue;
 
-class TodoPriority
+/**
+ * @see \Alister\Test\Todotxt\Parser\TodoPriorityTest
+ */
+final class TodoPriority
 {
-    // @see https://regex101.com/r/SZr0X5/13 Allows 'A'-'Z', or '(A)'-'(Z)' all with lower-case.
+    /**
+     * @See https://regex101.com/r/SZr0X5/13 Allows 'A'-'Z', or '(A)'-'(Z)' all with lower-case.
+     * @var string
+     */
     private const VALID_PRIORITIES = '#^\(?([A-Z])\)?$#i';
 
-    private string $priority;
+    private readonly string $priority;
 
     /**
      * @throws UnknownPriorityValue
@@ -31,7 +37,11 @@ class TodoPriority
      */
     private function getPriorityOrThrow(?string $priority): string
     {
-        if ($priority === '' || $priority === '()') {
+        if ($priority === '') {
+            return '';
+        }
+
+        if ($priority === '()') {
             return '';
         }
 
@@ -39,7 +49,7 @@ class TodoPriority
         if (!isset($matches[1])) {
             $displayPriority = $priority ?? 'null';
 
-            throw new UnknownPriorityValue("Priority should only be 'A-Z', was '{$displayPriority}'");
+            throw new UnknownPriorityValue(sprintf("Priority should only be 'A-Z', was '%s'", $displayPriority));
         }
 
         return strtoupper($matches[1]);

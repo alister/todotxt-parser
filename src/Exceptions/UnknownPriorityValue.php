@@ -6,6 +6,6 @@ namespace Alister\Todotxt\Parser\Exceptions;
 
 use Exception;
 
-class UnknownPriorityValue extends Exception
+final class UnknownPriorityValue extends Exception
 {
 }

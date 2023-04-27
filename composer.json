@@ -1,12 +1,9 @@
 {
   "name": "alister/todotxt-parser",
-  "type": "library",
   "description": "parser for the TodoTxt format",
-  "keywords": [
-    "todotxt",
-    "parser"
-  ],
   "license": "MIT",
+  "type": "library",
+  "keywords": [ "todotxt", "parser" ],
   "authors": [
     {
       "name": "Alister Bulman",
@@ -14,69 +11,56 @@
       "homepage": "https://abulman.co.uk/"
     }
   ],
-  "require": {
-    "php": "^7.4 || ^8"
-  },
+  "require": { "php": "^8.1" },
   "require-dev": {
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
     "ergebnis/composer-normalize": "^2.5",
     "hamcrest/hamcrest-php": "^2",
     "mockery/mockery": "^1.3",
     "php-parallel-lint/php-parallel-lint": "^1.2",
-    "phpstan/extension-installer": "^1",
-    "phpstan/phpstan": "^0.12.25",
-    "phpstan/phpstan-mockery": "^0.12.5",
-    "phpstan/phpstan-phpunit": "^0.12.8",
-    "phpunit/phpunit": "^9.1",
-    "psy/psysh": "^0.10.4",
-    "slevomat/coding-standard": "^6.3",
+    "phpstan/extension-installer": "^1.3",
+    "phpstan/phpstan": "^1.10",
+    "phpstan/phpstan-mockery": "^1.1",
+    "phpstan/phpstan-phpunit": "^1.3",
+    "phpunit/phpunit": "^9.5",
+    "psy/psysh": "^0.11.16",
+    "slevomat/coding-standard": "^8.11",
     "squizlabs/php_codesniffer": "^3.5",
     "symfony/console": "^5.1",
     "symfony/filesystem": "^5.1",
     "symfony/framework-bundle": "^5.1",
-    "symplify/easy-ci": "^9.0",
-    "vimeo/psalm": "^4.2"
+    "symplify/easy-ci": "11.2.0.72",
+    "vimeo/psalm": "^5.9"
   },
-  "config": {
-    "sort-packages": true
-  },
-  "autoload": {
-    "psr-4": {
-      "Alister\\Todotxt\\Parser\\": "src/"
-    }
-  },
+  "autoload": { "psr-4": { "Alister\\Todotxt\\Parser\\": "src/" } },
   "autoload-dev": {
     "psr-4": {
       "Alister\\Console\\": "resources/console/",
       "Alister\\Test\\Todotxt\\Parser\\": "tests/"
     },
-    "files": [
-      "vendor/hamcrest/hamcrest-php/hamcrest/Hamcrest.php"
-    ]
+    "files": [ "vendor/hamcrest/hamcrest-php/hamcrest/Hamcrest.php" ]
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "ergebnis/composer-normalize": true,
+      "phpstan/extension-installer": true
+    },
+    "sort-packages": true
   },
   "scripts": {
-    "td:analyze": [
-      "@td:analyze:phpstan",
-      "@td:analyze:psalm"
-    ],
+    "td:analyze": [ "@td:analyze:phpstan", "@td:analyze:psalm" ],
     "td:analyze:phpstan": "phpstan analyse --no-progress",
     "td:analyze:psalm": "psalm --diff --show-info=true --config=psalm.xml",
     "td:build:clean": "git clean -fX build/.",
     "td:build:clear-cache": "git clean -fX build/cache/.",
-    "td:lint": [
-      "parallel-lint src tests",
-      "phpcs --cache=build/cache/phpcs.cache"
-    ],
+    "td:lint": [ "parallel-lint src tests", "phpcs --cache=build/cache/phpcs.cache" ],
     "td:lint:fix": "./bin/lint-fix.sh",
-    "td:repl": [
-      "echo ; echo 'Type ./bin/repl to start the REPL.'"
-    ],
+    "td:rector": "tools/rector/vendor/bin/rector --dry-run",
+    "td:rector:fix": "tools/rector/vendor/bin/rector",
+    "td:repl": [ "echo ; echo 'Type ./bin/repl to start the REPL.'" ],
     "td:test": "phpunit",
-    "td:test:all": [
-      "@td:lint",
-      "@td:analyze",
-      "@td:test"
-    ],
+    "td:test:all": [ "@td:lint", "@td:analyze", "@td:test" ],
     "td:test:coverage:ci": "phpunit --coverage-clover build/logs/clover.xml",
     "td:test:coverage:html": "phpunit --coverage-html build/coverage",
     "td:test:coverage:text": "phpunit --coverage-text"

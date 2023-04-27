@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @coversDefaultClass \Alister\Todotxt\Parser\TodoPriority
  */
-class TodoPriorityTest extends TestCase
+final class TodoPriorityTest extends TestCase
 {
     /**
      * @throws UnknownPriorityValue
@@ -21,8 +21,8 @@ class TodoPriorityTest extends TestCase
      */
     public function testPriorityGood(?string $priority, string $expectedPriority): void
     {
-        $actual = new TodoPriority($priority);
-        $this->assertSame($expectedPriority, $actual->getPriority());
+        $todoPriority = new TodoPriority($priority);
+        $this->assertSame($expectedPriority, $todoPriority->getPriority());
     }
 
     public function dpPriorityGood(): Generator
@@ -31,8 +31,8 @@ class TodoPriorityTest extends TestCase
         yield "'()':''" => ['()', ''];
 
         foreach ([...range('a', 'z'), ...range('A', 'Z')] as $p) {
-            yield "($p):$p" => ["($p)", strtoupper($p)];
-            yield "good, without brackets $p:$p" => [$p, strtoupper($p)];
+            yield sprintf('(%s):%s', $p, $p) => [sprintf('(%s)', $p), strtoupper($p)];
+            yield sprintf('good, without brackets %s:%s', $p, $p) => [$p, strtoupper($p)];
         }
     }
 
@@ -43,13 +43,13 @@ class TodoPriorityTest extends TestCase
     {
         $this->expectException(UnknownPriorityValue::class);
         /** @noinspection PhpUnusedLocalVariableInspection */
-        $unused = new TodoPriority($priority);
+        $todoPriority = new TodoPriority($priority);
     }
 
     public function dpPriorityBad(): Generator
     {
         foreach (['(0)', '(1)', '(9)', '(99)', '(!)', '( )', '(#)', '(aa)', '(bad)'] as $p) {
-            yield "bad: '$p'" => [$p];
+            yield sprintf("bad: '%s'", $p) => [$p];
         }
     }
 }

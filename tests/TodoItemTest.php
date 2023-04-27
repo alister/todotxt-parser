@@ -15,8 +15,11 @@ use PHPUnit\Framework\TestCase;
 /**
  * @coversDefaultClass \Alister\Todotxt\Parser\TodoItem
  */
-class TodoItemTest extends TestCase
+final class TodoItemTest extends TestCase
 {
+    /** @var string */
+    private const TODO_TEXT = 'text +tag @context +tag @context +tag @context +tag @context';
+
     public function testTodoItemSimplectContent(): void
     {
         $todoItem = new TodoItem('text');
@@ -53,14 +56,14 @@ class TodoItemTest extends TestCase
      */
     public function testTodoItemNotDone(): void
     {
-        $created = new DateTime('2020-12-31');
-        $todoItem = new TodoItem('text', 'A', $created, null, false);
+        $dateTime = new DateTime('2020-12-31');
+        $todoItem = new TodoItem('text', 'A', $dateTime, null, false);
 
         $this->assertInstanceOf(TodoItem::class, $todoItem);
         $this->assertSame($todoItem->getText(), 'text');
         $this->assertEquals($todoItem->getPriority(), new TodoPriority('A'));
         $this->assertSame($todoItem->getPriority()->getPriority(), 'A');
-        $this->assertSame($todoItem->getCreated(), $created);
+        $this->assertSame($todoItem->getCreated(), $dateTime);
         $this->assertNull($todoItem->getCompletion());
         $this->assertFalse($todoItem->isDone());
     }
@@ -70,17 +73,16 @@ class TodoItemTest extends TestCase
      */
     public function testTodoItemProjectTagsUniquePerTag(): void
     {
-        $text = 'text +tag @context +tag @context +tag @context +tag @context';
-        $todoItem = new TodoItem($text);
+        $todoItem = new TodoItem(self::TODO_TEXT);
 
         $this->assertInstanceOf(TodoItem::class, $todoItem);
-        $this->assertSame($todoItem->getText(), $text);
+        $this->assertSame($todoItem->getText(), self::TODO_TEXT);
 
         $this->assertCount(1, $todoItem->getTags());
-        $this->assertEquals(['tag'], $todoItem->getTags());
+        $this->assertSame(['tag'], $todoItem->getTags());
 
         $this->assertCount(1, $todoItem->getContext());
-        $this->assertEquals(['context'], $todoItem->getContext());
+        $this->assertSame(['context'], $todoItem->getContext());
     }
 
     /**
@@ -95,8 +97,8 @@ class TodoItemTest extends TestCase
         bool $done = false,
         ?DateTimeInterface $completion = null
     ): void {
-        $sut = new TodoItem($text, $priority, $created, $completion, $done);
-        $this->assertInstanceOf(TodoItem::class, $sut);
+        $todoItem = new TodoItem($text, $priority, $created, $completion, $done);
+        $this->assertInstanceOf(TodoItem::class, $todoItem);
     }
 
     public function dpTodoItemGood(): Generator
