@@ -4,14 +4,17 @@
        xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
        totallyTyped="true"
        cacheDirectory="./build/cache/psalm"
-       errorBaseline="./psalm-baseline.xml">
-
+       errorBaseline="./psalm-baseline.xml"
+       findUnusedCode="false"
+       findUnusedBaselineEntry="false"
+>
     <projectFiles>
         <directory name="./src"/>
         <directory name="./resources/console"/>
         <ignoreFiles>
             <directory name="./tests"/>
             <file name="src/TodotxtBundle.php"/>
+            <file name="vendor/symfony/console/Command/Command.php"/>
         </ignoreFiles>
     </projectFiles>
 </psalm>

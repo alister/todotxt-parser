@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ParseTodoTxtFile extends Command
 {
-    /** @var string */
+    /** @var ?string */
     protected static $defaultName = 'app:parse-todotxt';
 
     private TodoCounting $todoCounting;

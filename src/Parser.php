@@ -113,7 +113,7 @@ class Parser
 
         $completion = null;
         $created = null;
-        if (isset($date1, $date2)) {
+        if (isset($date1) && isset($date2)) {
             $completion = $date1;
             $created = $date2;
         } elseif (isset($date1)) {
