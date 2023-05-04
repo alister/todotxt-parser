@@ -6,6 +6,7 @@ use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Set\PHPUnitLevelSetList;
 use Rector\PHPUnit\Set\PHPUnitSetList;
+use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonyLevelSetList;
@@ -22,8 +23,12 @@ return static function (RectorConfig $rectorConfig): void {
     // register a single rule
     // $rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
 
+    $rectorConfig->skip([
+        FinalizeClassesWithoutChildrenRector::class => __DIR__ . '/src/Commands/',
+    ]);
+
     // define sets of rules
-   $rectorConfig->sets([
+    $rectorConfig->sets([
        LevelSetList::UP_TO_PHP_82,
 
        SetList::ACTION_INJECTION_TO_CONSTRUCTOR_INJECTION,

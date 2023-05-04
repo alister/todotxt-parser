@@ -55,8 +55,8 @@ final class ParserTest extends TestCase
         $this->assertEquals($tags, $todoItem->getTags());
         $this->assertEquals($context, $todoItem->getContext());
 
-        $this->assertEquals($todoText, $todoItem->__toString());
-        $this->assertEquals($todoText, (string) $todoItem);
+        $this->assertSame($todoText, $todoItem->__toString());
+        $this->assertSame($todoText, (string) $todoItem);
     }
 
     /**

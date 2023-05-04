@@ -18,7 +18,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class ParseTodoTxtFile extends Command
+class ParseTodoTxtFile extends Command
 {
     /** @var ?string */
     protected static $defaultName = 'app:parse-todotxt';

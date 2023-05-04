@@ -50,23 +50,23 @@ final class TodoItem implements Stringable, JsonSerializable
     {
         $arr = array_filter(
             $this->jsonSerialize(),
-            fn($x): bool => $x !== null && $x !== ''
+            static fn($x): bool => $x !== null && $x !== ''
         );
 
         return implode(' ', $arr);
     }
 
     /**
-     * @return array<string,string|null>
+     * @return array{done: string|null, priority: mixed, completion: string|null, created: string|null, text: string}
      */
     public function jsonSerialize(): array
     {
         return [
-            'done' => $this->isDone() ? 'x' : null,
-            'priority' => (string) $this->getPriority(),
-            'completion' => $this->isDone() ? $this->getCompletion()?->format('Y-m-d') : null,
-            'created' => $this->getCreated()?->format('Y-m-d'),
-            'text' => $this->getText(),
+            'done' => $this->done ? 'x' : null,
+            'priority' => (string) $this->todoPriority,
+            'completion' => $this->done ? $this->completion?->format('Y-m-d') : null,
+            'created' => $this->created?->format('Y-m-d'),
+            'text' => $this->text,
         ];
     }
 

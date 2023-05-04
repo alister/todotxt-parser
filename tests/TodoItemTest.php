@@ -62,14 +62,14 @@ final class TodoItemTest extends TestCase
     public function testTodoItemNotDone(): void
     {
         $expected = '(A) 2020-12-31 text';
-        $dateTime = new DateTimeImmutable('2020-12-31');
-        $todoItem = new TodoItem('text', 'A', $dateTime, null, false);
+        $dateTimeImmutable = new DateTimeImmutable('2020-12-31');
+        $todoItem = new TodoItem('text', 'A', $dateTimeImmutable, null, false);
 
         $this->assertInstanceOf(TodoItem::class, $todoItem);
         $this->assertSame($todoItem->getText(), 'text');
         $this->assertEquals($todoItem->getPriority(), new TodoPriority('A'));
         $this->assertSame($todoItem->getPriority()->getPriority(), 'A');
-        $this->assertSame($todoItem->getCreated(), $dateTime);
+        $this->assertSame($todoItem->getCreated(), $dateTimeImmutable);
         $this->assertNull($todoItem->getCompletion());
         $this->assertFalse($todoItem->isDone());
 
@@ -143,6 +143,6 @@ final class TodoItemTest extends TestCase
         $todoItem6 = $todoItem5->withCompletion($updated);
 
         // and now it's totally changed...
-        $this->assertEquals('x (A) 2023-04-27 2023-04-27 test', (string) $todoItem6);
+        $this->assertSame('x (A) 2023-04-27 2023-04-27 test', (string) $todoItem6);
     }
 }
