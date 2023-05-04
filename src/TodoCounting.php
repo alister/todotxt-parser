@@ -40,22 +40,22 @@ final class TodoCounting
     public function addCountByUniqueContext(TodoItem $todoItem): void
     {
         foreach ($todoItem->getContext() as $context) {
-            if (!isset($this->uniqContexts[$context])) {
-                $this->uniqContexts[$context] = 0;
+            if (!isset($this->uniqContexts[$context->toString()])) {
+                $this->uniqContexts[$context->toString()] = 0;
             }
 
-            ++$this->uniqContexts[$context];
+            ++$this->uniqContexts[$context->toString()];
         }
     }
 
     public function addCountByUniqueTags(TodoItem $todoItem): void
     {
         foreach ($todoItem->getTags() as $tag) {
-            if (!isset($this->uniqTags[$tag])) {
-                $this->uniqTags[$tag] = 0;
+            if (!isset($this->uniqTags[$tag->toString()])) {
+                $this->uniqTags[$tag->toString()] = 0;
             }
 
-            ++$this->uniqTags[$tag];
+            ++$this->uniqTags[$tag->toString()];
         }
     }
 

@@ -12,6 +12,8 @@ use DateTimeInterface;
 use Generator;
 use PHPUnit\Framework\TestCase;
 
+use function Symfony\Component\String\s;
+
 /**
  * @coversDefaultClass \Alister\Todotxt\Parser\TodoItem
  */
@@ -25,7 +27,8 @@ final class TodoItemTest extends TestCase
         $todoItem = new TodoItem('text');
 
         $this->assertInstanceOf(TodoItem::class, $todoItem);
-        $this->assertSame($todoItem->getText(), 'text');
+        $this->assertSame($todoItem->getText()->toString(), 'text');
+        $this->assertEquals($todoItem->getText(), s('text'));
         $this->assertEquals($todoItem->getPriority(), new TodoPriority(''));
         $this->assertSame($todoItem->getPriority()->getPriority(), '');
         $this->assertNull($todoItem->getCreated());
@@ -46,7 +49,8 @@ final class TodoItemTest extends TestCase
         $todoItem = new TodoItem('text', 'A', $created, $completion, true);
 
         $this->assertInstanceOf(TodoItem::class, $todoItem);
-        $this->assertSame($todoItem->getText(), 'text');
+        $this->assertSame($todoItem->getText()->toString(), 'text');
+        $this->assertEquals($todoItem->getText(), s('text'));
         $this->assertEquals($todoItem->getPriority(), new TodoPriority('A'));
         $this->assertSame($todoItem->getPriority()->getPriority(), 'A');
         $this->assertSame($todoItem->getCreated(), $created);
@@ -66,7 +70,8 @@ final class TodoItemTest extends TestCase
         $todoItem = new TodoItem('text', 'A', $dateTimeImmutable, null, false);
 
         $this->assertInstanceOf(TodoItem::class, $todoItem);
-        $this->assertSame($todoItem->getText(), 'text');
+        $this->assertSame($todoItem->getText()->toString(), 'text');
+        $this->assertEquals($todoItem->getText(), s('text'));
         $this->assertEquals($todoItem->getPriority(), new TodoPriority('A'));
         $this->assertSame($todoItem->getPriority()->getPriority(), 'A');
         $this->assertSame($todoItem->getCreated(), $dateTimeImmutable);
@@ -81,16 +86,17 @@ final class TodoItemTest extends TestCase
      */
     public function testTodoItemProjectTagsUniquePerTag(): void
     {
-        $todoItem = new TodoItem(self::TODO_TEXT);
+        $todoItem = new TodoItem(s(self::TODO_TEXT));
 
         $this->assertInstanceOf(TodoItem::class, $todoItem);
-        $this->assertSame($todoItem->getText(), self::TODO_TEXT);
+        $this->assertSame($todoItem->getText()->toString(), self::TODO_TEXT);
+        $this->assertEquals($todoItem->getText(), s(self::TODO_TEXT));
 
         $this->assertCount(1, $todoItem->getTags());
-        $this->assertSame(['tag'], $todoItem->getTags());
+        $this->assertEquals([s('tag')], $todoItem->getTags());
 
         $this->assertCount(1, $todoItem->getContext());
-        $this->assertSame(['context'], $todoItem->getContext());
+        $this->assertEquals([s('context')], $todoItem->getContext());
 
         $this->assertSame(self::TODO_TEXT, (string) $todoItem);
     }
@@ -99,6 +105,7 @@ final class TodoItemTest extends TestCase
      * @throws UnknownPriorityValue
      *
      * @dataProvider dpTodoItemGood
+     * @dataProvider dpTodoItemGoodExtended
      */
     public function testTodoItemGood(
         string $text,
@@ -124,6 +131,16 @@ final class TodoItemTest extends TestCase
         yield 'x (A) 2020-12-31 text +tag' => ['text +tag', 'A', $created, true];
         yield 'x (A) 2020-12-31 text +project @context' => ['text +project @context', 'A', $created, true];
         yield 'x (A) 2021-01-15 2020-12-31 text' => ['text', 'A', $created, true, $completion];
+    }
+
+    public function dpTodoItemGoodExtended(): Generator
+    {
+        $created = new DateTimeImmutable('2020-12-31');
+        $completion = new DateTimeImmutable('2021-01-15');
+
+        // phpcs:ignore Generic.Files.LineLength.TooLong
+        yield 'x (A) 2021-01-15 2020-12-31 Prangern wir diese Männer an' => ['Prangern wir diese Männer an', 'A', $created, true, $completion];
+        yield 'x (A) 2021-01-15 2020-12-31 Test spend £0.15' => ['Test spend £0.15', 'A', $created, true, $completion];
     }
 
     public function testWithTodoItem(): void
