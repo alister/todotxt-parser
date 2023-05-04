@@ -12,6 +12,8 @@ use DateTimeInterface;
 use Generator;
 use PHPUnit\Framework\TestCase;
 
+use function Symfony\Component\String\s;
+
 /**
  * @coversDefaultClass \Alister\Todotxt\Parser\TodoItem
  */
@@ -25,7 +27,8 @@ final class TodoItemTest extends TestCase
         $todoItem = new TodoItem('text');
 
         $this->assertInstanceOf(TodoItem::class, $todoItem);
-        $this->assertSame($todoItem->getText(), 'text');
+        $this->assertSame($todoItem->getText()->toString(), 'text');
+        $this->assertEquals($todoItem->getText(), s('text'));
         $this->assertEquals($todoItem->getPriority(), new TodoPriority(''));
         $this->assertSame($todoItem->getPriority()->getPriority(), '');
         $this->assertNull($todoItem->getCreated());
@@ -46,7 +49,8 @@ final class TodoItemTest extends TestCase
         $todoItem = new TodoItem('text', 'A', $created, $completion, true);
 
         $this->assertInstanceOf(TodoItem::class, $todoItem);
-        $this->assertSame($todoItem->getText(), 'text');
+        $this->assertSame($todoItem->getText()->toString(), 'text');
+        $this->assertEquals($todoItem->getText(), s('text'));
         $this->assertEquals($todoItem->getPriority(), new TodoPriority('A'));
         $this->assertSame($todoItem->getPriority()->getPriority(), 'A');
         $this->assertSame($todoItem->getCreated(), $created);
@@ -62,14 +66,15 @@ final class TodoItemTest extends TestCase
     public function testTodoItemNotDone(): void
     {
         $expected = '(A) 2020-12-31 text';
-        $dateTime = new DateTimeImmutable('2020-12-31');
-        $todoItem = new TodoItem('text', 'A', $dateTime, null, false);
+        $dateTimeImmutable = new DateTimeImmutable('2020-12-31');
+        $todoItem = new TodoItem('text', 'A', $dateTimeImmutable, null, false);
 
         $this->assertInstanceOf(TodoItem::class, $todoItem);
-        $this->assertSame($todoItem->getText(), 'text');
+        $this->assertSame($todoItem->getText()->toString(), 'text');
+        $this->assertEquals($todoItem->getText(), s('text'));
         $this->assertEquals($todoItem->getPriority(), new TodoPriority('A'));
         $this->assertSame($todoItem->getPriority()->getPriority(), 'A');
-        $this->assertSame($todoItem->getCreated(), $dateTime);
+        $this->assertSame($todoItem->getCreated(), $dateTimeImmutable);
         $this->assertNull($todoItem->getCompletion());
         $this->assertFalse($todoItem->isDone());
 
@@ -81,16 +86,17 @@ final class TodoItemTest extends TestCase
      */
     public function testTodoItemProjectTagsUniquePerTag(): void
     {
-        $todoItem = new TodoItem(self::TODO_TEXT);
+        $todoItem = new TodoItem(s(self::TODO_TEXT));
 
         $this->assertInstanceOf(TodoItem::class, $todoItem);
-        $this->assertSame($todoItem->getText(), self::TODO_TEXT);
+        $this->assertSame($todoItem->getText()->toString(), self::TODO_TEXT);
+        $this->assertEquals($todoItem->getText(), s(self::TODO_TEXT));
 
         $this->assertCount(1, $todoItem->getTags());
-        $this->assertSame(['tag'], $todoItem->getTags());
+        $this->assertEquals([s('tag')], $todoItem->getTags());
 
         $this->assertCount(1, $todoItem->getContext());
-        $this->assertSame(['context'], $todoItem->getContext());
+        $this->assertEquals([s('context')], $todoItem->getContext());
 
         $this->assertSame(self::TODO_TEXT, (string) $todoItem);
     }
@@ -99,6 +105,7 @@ final class TodoItemTest extends TestCase
      * @throws UnknownPriorityValue
      *
      * @dataProvider dpTodoItemGood
+     * @dataProvider dpTodoItemGoodExtended
      */
     public function testTodoItemGood(
         string $text,
@@ -126,6 +133,16 @@ final class TodoItemTest extends TestCase
         yield 'x (A) 2021-01-15 2020-12-31 text' => ['text', 'A', $created, true, $completion];
     }
 
+    public function dpTodoItemGoodExtended(): Generator
+    {
+        $created = new DateTimeImmutable('2020-12-31');
+        $completion = new DateTimeImmutable('2021-01-15');
+
+        // phpcs:ignore Generic.Files.LineLength.TooLong
+        yield 'x (A) 2021-01-15 2020-12-31 Prangern wir diese Männer an' => ['Prangern wir diese Männer an', 'A', $created, true, $completion];
+        yield 'x (A) 2021-01-15 2020-12-31 Test spend £0.15' => ['Test spend £0.15', 'A', $created, true, $completion];
+    }
+
     public function testWithTodoItem(): void
     {
         $created = new DateTimeImmutable('2020-12-31');
@@ -143,6 +160,6 @@ final class TodoItemTest extends TestCase
         $todoItem6 = $todoItem5->withCompletion($updated);
 
         // and now it's totally changed...
-        $this->assertEquals('x (A) 2023-04-27 2023-04-27 test', (string) $todoItem6);
+        $this->assertSame('x (A) 2023-04-27 2023-04-27 test', (string) $todoItem6);
     }
 }

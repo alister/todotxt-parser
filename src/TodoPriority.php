@@ -50,7 +50,7 @@ final class TodoPriority implements Stringable
         if (!isset($matches[1])) {
             $displayPriority = $priority ?? 'null';
 
-            throw new UnknownPriorityValue(sprintf("Priority should only be 'A-Z', was '%s'", $displayPriority));
+            throw UnknownPriorityValue::create($displayPriority);
         }
 
         return strtoupper($matches[1]);

@@ -8,25 +8,29 @@ use Alister\Todotxt\Parser\Exceptions\UnknownPriorityValue;
 use DateTimeInterface;
 use JsonSerializable;
 use Stringable;
+use Symfony\Component\String\AbstractString;
+
+use function Symfony\Component\String\s;
 
 /**
  * @see \Alister\Test\Todotxt\Parser\TodoItemTest
  */
 final class TodoItem implements Stringable, JsonSerializable
 {
+    private AbstractString $text;
     private readonly TodoPriority $todoPriority;
 
     /**
      * Holding +the +project +tags, if there are any in the text
      *
-     * @var string[]
+     * @var AbstractString[]
      */
     private array $tags = [];
 
     /**
      * Holding the @context tags, if there are any in the text
      *
-     * @var string[]
+     * @var AbstractString[]
      */
     private array $context = [];
 
@@ -34,39 +38,45 @@ final class TodoItem implements Stringable, JsonSerializable
      * @throws UnknownPriorityValue
      */
     public function __construct(
-        private readonly string $text,
+        string|AbstractString $text,
         string $priority = '',
         private readonly ?DateTimeInterface $created = null,
         private readonly ?DateTimeInterface $completion = null,
         private readonly bool $done = false
     ) {
+        if ($text instanceof AbstractString) {
+            $this->text = $text;
+        } else {
+            $this->text = s($text);
+        }
         $this->todoPriority = new TodoPriority($priority);
 
-        $this->parseTags($text);
-        $this->parseContext($text);
+        $this->parseTags($this->text);
+        $this->parseContext($this->text);
     }
 
     public function __toString(): string
     {
         $arr = array_filter(
             $this->jsonSerialize(),
-            fn($x): bool => $x !== null && $x !== ''
+            static fn($x): bool => $x !== null && $x !== ''
         );
 
         return implode(' ', $arr);
     }
 
     /**
-     * @return array<string,string|null>
+     * phpcs:ignore Generic.Files.LineLength.TooLong
+     * @return array{done: string|null, priority: string, completion: string|null, created: string|null, text: AbstractString}
      */
     public function jsonSerialize(): array
     {
         return [
-            'done' => $this->isDone() ? 'x' : null,
-            'priority' => (string) $this->getPriority(),
-            'completion' => $this->isDone() ? $this->getCompletion()?->format('Y-m-d') : null,
-            'created' => $this->getCreated()?->format('Y-m-d'),
-            'text' => $this->getText(),
+            'done' => $this->done ? 'x' : null,
+            'priority' => (string) $this->todoPriority,
+            'completion' => $this->done ? $this->completion?->format('Y-m-d') : null,
+            'created' => $this->created?->format('Y-m-d'),
+            'text' => $this->text,
         ];
     }
 
@@ -125,7 +135,7 @@ final class TodoItem implements Stringable, JsonSerializable
         );
     }
 
-    public function getText(): string
+    public function getText(): AbstractString
     {
         return $this->text;
     }
@@ -151,7 +161,7 @@ final class TodoItem implements Stringable, JsonSerializable
     }
 
     /**
-     * @return array<array-key, string>
+     * @return array<array-key, AbstractString>
      */
     public function getTags(): array
     {
@@ -159,39 +169,41 @@ final class TodoItem implements Stringable, JsonSerializable
     }
 
     /**
-     * @return array<array-key, string>
+     * @return array<array-key, AbstractString>
      */
     public function getContext(): array
     {
         return $this->context;
     }
 
-    private function parseTags(string $text): void
+    private function parseTags(AbstractString $text): void
     {
         $this->tags = $this->collectByPrefix('+', $text);
     }
 
-    private function parseContext(string $text): void
+    private function parseContext(AbstractString $text): void
     {
         $this->context = $this->collectByPrefix('@', $text);
     }
 
     /**
-     * @return string[] prefixed word
+     * @return array<AbstractString> prefixed word
      */
-    private function collectByPrefix(string $prefixChar, string $text): array
+    private function collectByPrefix(string $prefixChar, AbstractString $text): array
     {
         $items = [];
 
-        if (!str_contains($text, $prefixChar)) {
+        if (!$text->containsAny($prefixChar)) {
             return [];
         }
 
-        $words = array_unique(explode(' ', $text));
+        /** @var array<AbstractString> $words */
+        $words = array_unique($text->split(' '));
+        /** @var AbstractString $word */
         foreach ($words as $word) {
-            $word = trim($word);
-            if (isset($word[0]) && $word[0] === $prefixChar) {
-                $items[] = trim($word, $prefixChar);
+            $word = $word->trim();
+            if ($word->length() > 0 && $word->startsWith($prefixChar)) {
+                $items[] = $word->trimPrefix($prefixChar);
             }
         }
 

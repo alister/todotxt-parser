@@ -69,7 +69,7 @@ final class Parser
         $priority = $this->parsePriority();
 
         try {
-                [$completion, $created] = $this->parseDates();
+            [$completion, $created] = $this->parseDates();
         } catch (Throwable) {
             return null;
         }
