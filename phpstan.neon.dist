@@ -1,7 +1,6 @@
 parameters:
     tmpDir: ./build/cache/phpstan
     level: max
-    checkMissingIterableValueType: false
     paths:
         - ./src
         - ./tests
@@ -10,4 +9,7 @@ parameters:
     excludePaths:
         - src/TodotxtBundle.php
         - resources/console/Repl.php
-
+    
+    ignoreErrors:
+        -
+            identifier: missingType.iterableValue

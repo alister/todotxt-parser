@@ -66,7 +66,9 @@ final class TodoItem implements Stringable, JsonSerializable
     }
 
     /**
-     * phpcs:ignore Generic.Files.LineLength.TooLong
+     * Serializing our custom data.
+     *
+     * @phpcs:ignore Generic.Files.LineLength.TooLong
      * @return array{done: string|null, priority: string, completion: string|null, created: string|null, text: AbstractString}
      */
     public function jsonSerialize(): array
