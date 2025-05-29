@@ -195,11 +195,11 @@
     <!-- Require consistent spacing for control structures (add a line break) -->
     <rule ref="SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing">
         <properties>
-            <property name="tokensToCheck" type="array">
-                <element value="T_RETURN" />
-                <element value="T_THROW" />
-                <element value="T_BREAK" />
-                <element value="T_CONTINUE" />
+            <property name="jumpStatements" type="array">
+                <element value="return" />
+                <element value="throw" />
+                <element value="break" />
+                <element value="continue" />
             </property>
         </properties>
     </rule>
@@ -253,11 +253,6 @@
             <property name="allowFullyQualifiedGlobalFunctions" value="false"/>
             <property name="allowFullyQualifiedExceptions" value="true"/>
             <property name="allowPartialUses" value="false"/>
-            <property name="fullyQualifiedKeywords" type="array">
-                <element value="T_EXTENDS"/>
-                <element value="T_IMPLEMENTS"/>
-                <element value="T_USE"/>
-            </property>
         </properties>
     </rule>
 
@@ -409,8 +404,8 @@
         </properties>
     </rule>
 
-    <!-- Require space after language constructs -->
-    <rule ref="Squiz.WhiteSpace.LanguageConstructSpacing"/>
+    <!-- Require space after language constructs? Was: Generic.WhiteSpace.LanguageConstructSpacing -->
+    <rule ref="Generic.WhiteSpace.LanguageConstructSpacing"/>
 
     <!-- Require space around logical operators -->
     <rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing"/>
