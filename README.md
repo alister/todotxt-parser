@@ -118,7 +118,7 @@ composer td:[TAB][TAB]
 #### Coding Standards
 
 This project follows a superset of [PSR-12](https://www.php-fig.org/psr/psr-12/)
-coding standards, enforced by [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer).
+coding standards, enforced by [PHP_CodeSniffer](https://github.com/PHPCSStandards/PHP_CodeSniffer).
 The project PHP_CodeSniffer configuration may be found in `phpcs.xml.dist`.
 
 lint-staged will run PHP_CodeSniffer before committing. It will attempt to fix
