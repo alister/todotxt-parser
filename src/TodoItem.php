@@ -59,7 +59,7 @@ final class TodoItem implements Stringable, JsonSerializable
     {
         $arr = array_filter(
             $this->jsonSerialize(),
-            static fn($x): bool => $x !== null && $x !== ''
+            static fn(string|AbstractString|null $x): bool => $x !== null && $x !== ''
         );
 
         return implode(' ', $arr);

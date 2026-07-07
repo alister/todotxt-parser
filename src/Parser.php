@@ -44,10 +44,6 @@ final class Parser
 
     private string $todoLine = '';
 
-    public function __construct()
-    {
-    }
-
     /**
      * @throws UnknownPriorityValue
      */

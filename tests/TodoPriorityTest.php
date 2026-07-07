@@ -40,8 +40,7 @@ final class TodoPriorityTest extends TestCase
     {
         $this->expectException(UnknownPriorityValue::class);
 
-        /** @noinspection PhpUnusedLocalVariableInspection */
-        $todoPriority = new TodoPriority($priority);
+        new TodoPriority($priority);
     }
 
     public static function dpPriorityBad(): Generator

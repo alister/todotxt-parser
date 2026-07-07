@@ -65,7 +65,7 @@ final class ParserTest extends TestCase
     {
         $created = new DateTimeImmutable('2020-01-31');
         $completion = new DateTimeImmutable('2020-02-01');
-        $expected = new TodoItem(text: 'text', priority: '', created: null, completion: null, done: false);
+        $expected = new TodoItem(text: 'text', priority: '', done: false);
 
         yield self::TODO_TEXT => [self::TODO_TEXT, $expected];
 

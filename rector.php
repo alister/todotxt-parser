@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
+use Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector;
 use Rector\Config\RectorConfig;
 
 return RectorConfig::configure()
     ->withPaths([
-        __DIR__ . '/resources',
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ])
@@ -24,8 +24,11 @@ return RectorConfig::configure()
     )
     ->withAttributesSets(all: \true)
     ->withSkip([
+        SimplifyIfElseToTernaryRector::class,
     ])
-    // ->withTypeCoverageLevel(0)
-    // ->withDeadCodeLevel(0)
-    // ->withCodeQualityLevel(0)
+    ->withPreparedSets(
+        deadCode: \true,
+        codeQuality: \true,
+        typeDeclarations: \true,
+    )
 ;
