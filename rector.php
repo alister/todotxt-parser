@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\CodeQuality\Rector\Attribute\ExplicitAttributeNamedArgsRector;
 use Rector\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector;
 use Rector\Config\RectorConfig;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
@@ -31,6 +32,9 @@ return RectorConfig::configure()
         RenamePropertyToMatchTypeRector::class,
         RenameParamToMatchTypeRector::class,
         RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class,
+        ExplicitAttributeNamedArgsRector::class => [
+            __DIR__ . '/tests',
+        ],
     ])
     ->withPreparedSets(
         deadCode: \true,
@@ -40,7 +44,7 @@ return RectorConfig::configure()
         typeDeclarationDocblocks: \true,
         privatization: \true,
         naming: \true,
-        namedArgs: \false,
+        namedArgs: \true,
         instanceOf: \false,
         earlyReturn: \true,
     )

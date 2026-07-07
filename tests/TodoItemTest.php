@@ -44,7 +44,7 @@ final class TodoItemTest extends TestCase
         $expected = 'x (A) 2021-01-15 2020-12-31 text';
         $created = new DateTimeImmutable('2020-12-31');
         $completion = new DateTimeImmutable('2021-01-15');
-        $todoItem = new TodoItem('text', 'A', $created, $completion, true);
+        $todoItem = new TodoItem('text', 'A', $created, $completion, done: true);
 
         $this->assertSame('text', $todoItem->getText()->toString());
         $this->assertEquals($todoItem->getText(), s('text'));
@@ -64,7 +64,7 @@ final class TodoItemTest extends TestCase
     {
         $expected = '(A) 2020-12-31 text';
         $dateTimeImmutable = new DateTimeImmutable('2020-12-31');
-        $todoItem = new TodoItem('text', 'A', $dateTimeImmutable, null, false);
+        $todoItem = new TodoItem('text', 'A', $dateTimeImmutable, done: false);
 
         $this->assertSame('text', $todoItem->getText()->toString());
         $this->assertEquals($todoItem->getText(), s('text'));
@@ -146,14 +146,14 @@ final class TodoItemTest extends TestCase
     public function testWithTodoItem(): void
     {
         $created = new DateTimeImmutable('2020-12-31');
-        $todoItem = new TodoItem('hello', 'C', $created, $created, false);
+        $todoItem = new TodoItem('hello', 'C', $created, $created, done: false);
 
         // only the created date - as it's not done.
         $this->assertSame('(C) 2020-12-31 hello', (string) $todoItem);
 
         $updated = new DateTimeImmutable('2023-04-27');
 
-        $todoItem2 = $todoItem->withDone(true);
+        $todoItem2 = $todoItem->withDone(done: true);
         $todoItem3 = $todoItem2->withPriority('A');
         $todoItem4 = $todoItem3->withText('test');
         $todoItem5 = $todoItem4->withCreated($updated);

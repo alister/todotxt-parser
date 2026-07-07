@@ -82,27 +82,27 @@ final class ParserTest extends TestCase
         yield $str => [$str, $todoItem];
 
         $str = 'x 2020-01-31 text';
-        $todoItem = new TodoItem('text', '', $created, null, true);
+        $todoItem = new TodoItem('text', '', $created, done: true);
 
         yield $str => [$str, $todoItem];
 
         $str = 'x (Z) 2020-01-31 text';
-        $todoItem = new TodoItem('text', 'Z', $created, null, true);
+        $todoItem = new TodoItem('text', 'Z', $created, done: true);
 
         yield $str => [$str, $todoItem];
 
         $str = 'x 2020-02-01 2020-01-31 text';
-        $todoItem = new TodoItem('text', '', $created, $completion, true);
+        $todoItem = new TodoItem('text', '', $created, $completion, done: true);
 
         yield $str => [$str, $todoItem];
 
         $str = 'x (F) 2020-02-01 2020-01-31 text';
-        $todoItem = new TodoItem('text', 'F', $created, $completion, true);
+        $todoItem = new TodoItem('text', 'F', $created, $completion, done: true);
 
         yield $str => [$str, $todoItem];
 
         $str = 'x (F) 2020-02-01 2020-01-31 text +tag +tag2 @context1 @context2';
-        $todoItem = new TodoItem('text +tag +tag2 @context1 @context2', 'F', $created, $completion, true);
+        $todoItem = new TodoItem('text +tag +tag2 @context1 @context2', 'F', $created, $completion, done: true);
 
         yield $str => [$str, $todoItem, ['tag','tag2'], ['context1','context2']];
     }
