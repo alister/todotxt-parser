@@ -45,7 +45,8 @@ return RectorConfig::configure()
         privatization: \true,
         naming: \true,
         namedArgs: \true,
-        instanceOf: \false,
+        instanceOf: \true,
         earlyReturn: \true,
     )
+    ->withPHPStanConfigs([__DIR__ . '/phpstan.neon.dist'])
 ;

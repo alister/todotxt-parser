@@ -4,12 +4,5 @@ parameters:
     paths:
         - ./src
         - ./tests
-        - ./resources/console
     reportUnmatchedIgnoredErrors: false
-    excludePaths:
-        - src/TodotxtBundle.php
-        - resources/console/Repl.php
-    
-    ignoreErrors:
-        -
-            identifier: missingType.iterableValue
+    # excludePaths:
