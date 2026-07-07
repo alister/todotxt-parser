@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 use function Symfony\Component\String\s;
 
 #[CoversClass(TodoItem::class)]
+#[CoversClass(TodoPriority::class)]
 final class TodoItemTest extends TestCase
 {
     private const string TODO_TEXT = 'text +tag @context +tag @context +tag @context +tag @context';

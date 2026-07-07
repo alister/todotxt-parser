@@ -25,11 +25,16 @@ namespace Alister\Test\Todotxt\Parser;
 use Alister\Todotxt\Parser\Exceptions\UnknownPriorityValue;
 use Alister\Todotxt\Parser\Parser;
 use Alister\Todotxt\Parser\TodoItem;
+use Alister\Todotxt\Parser\TodoPriority;
 use DateTimeImmutable;
 use Generator;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(Parser::class)]
+#[CoversClass(TodoItem::class)]
+#[CoversClass(TodoPriority::class)]
 final class ParserTest extends TestCase
 {
     private const string TODO_TEXT = 'text';
@@ -59,7 +64,7 @@ final class ParserTest extends TestCase
     }
 
     /**
-     * @return \Generator<array<int, (TodoItem | array<int, string> | string)>>
+     * @return Generator<array<int, (TodoItem | array<int, string> | string)>>
      *
      * @throws UnknownPriorityValue
      */

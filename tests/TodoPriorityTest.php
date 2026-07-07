@@ -12,6 +12,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(TodoPriority::class)]
+#[CoversClass(UnknownPriorityValue::class)]
 final class TodoPriorityTest extends TestCase
 {
     /**
