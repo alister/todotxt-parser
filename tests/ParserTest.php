@@ -49,7 +49,7 @@ final class ParserTest extends TestCase
 
         $todoItem = $parser->parse($todoText);
 
-        $this->assertNotNull($todoItem);
+        $this->assertInstanceOf(TodoItem::class, $todoItem);
         $this->assertEquals($expectedItem, $todoItem);
         $this->assertEquals($tags, $todoItem->getTags());
         $this->assertEquals($context, $todoItem->getContext());
@@ -59,6 +59,8 @@ final class ParserTest extends TestCase
     }
 
     /**
+     * @return \Generator<array<int, (TodoItem | array<int, string> | string)>>
+     *
      * @throws UnknownPriorityValue
      */
     public static function dpParseTodoLine(): Generator
