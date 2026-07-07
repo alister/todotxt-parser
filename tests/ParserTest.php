@@ -27,21 +27,20 @@ use Alister\Todotxt\Parser\Parser;
 use Alister\Todotxt\Parser\TodoItem;
 use DateTimeImmutable;
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class ParserTest extends TestCase
 {
-    /** @var string */
-    private const TODO_TEXT = 'text';
+    private const string TODO_TEXT = 'text';
 
     /**
      * @param string[] $tags
      * @param string[] $context
      *
      * @throws UnknownPriorityValue
-     *
-     * @dataProvider dpParseTodoLine
      */
+    #[DataProvider('dpParseTodoLine')]
     public function testParse(string $todoText, TodoItem $expectedItem, array $tags = [], array $context = []): void
     {
         $parser = new Parser();
@@ -62,7 +61,7 @@ final class ParserTest extends TestCase
     /**
      * @throws UnknownPriorityValue
      */
-    public function dpParseTodoLine(): Generator
+    public static function dpParseTodoLine(): Generator
     {
         $created = new DateTimeImmutable('2020-01-31');
         $completion = new DateTimeImmutable('2020-02-01');

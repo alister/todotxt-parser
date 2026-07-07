@@ -7,25 +7,24 @@ namespace Alister\Test\Todotxt\Parser;
 use Alister\Todotxt\Parser\Exceptions\UnknownPriorityValue;
 use Alister\Todotxt\Parser\TodoPriority;
 use Generator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @coversDefaultClass \Alister\Todotxt\Parser\TodoPriority
- */
+#[CoversClass(TodoPriority::class)]
 final class TodoPriorityTest extends TestCase
 {
     /**
      * @throws UnknownPriorityValue
-     *
-     * @dataProvider dpPriorityGood
      */
+    #[DataProvider('dpPriorityGood')]
     public function testPriorityGood(?string $priority, string $expectedPriority): void
     {
         $todoPriority = new TodoPriority($priority);
         $this->assertSame($expectedPriority, $todoPriority->getPriority());
     }
 
-    public function dpPriorityGood(): Generator
+    public static function dpPriorityGood(): Generator
     {
         yield "'':''" => ['', ''];
         yield "'()':''" => ['()', ''];
@@ -36,17 +35,16 @@ final class TodoPriorityTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider dpPriorityBad
-     */
+    #[DataProvider('dpPriorityBad')]
     public function testPriorityBad(?string $priority): void
     {
         $this->expectException(UnknownPriorityValue::class);
+
         /** @noinspection PhpUnusedLocalVariableInspection */
         $todoPriority = new TodoPriority($priority);
     }
 
-    public function dpPriorityBad(): Generator
+    public static function dpPriorityBad(): Generator
     {
         foreach (['(0)', '(1)', '(9)', '(99)', '(!)', '( )', '(#)', '(aa)', '(bad)'] as $p) {
             yield sprintf("bad: '%s'", $p) => [$p];

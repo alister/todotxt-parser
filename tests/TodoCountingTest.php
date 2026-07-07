@@ -13,7 +13,7 @@ final class TodoCountingTest extends TestCase
     /**
      * @var array<string, int>
      */
-    private const SAMPLE_TAG_COUNTS = [
+    private const array SAMPLE_TAG_COUNTS = [
         'tag-a' => 10,
         'tag-b' => 20,
         'tag-c' => 30,
