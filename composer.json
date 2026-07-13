@@ -11,7 +11,7 @@
       "homepage": "https://abulman.co.uk/"
     }
   ],
-  "require": { "php": "^8.4", "symfony/string": "^8.1" },
+  "require": { "php": "^8.4", "symfony/string": "^7.4 || ^8.1" },
   "require-dev": {
     "dealerdirect/phpcodesniffer-composer-installer": "^1.2",
     "ergebnis/composer-normalize": "^2.52",
