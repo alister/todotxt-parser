@@ -6,14 +6,19 @@ namespace Alister\Test\Todotxt\Parser;
 
 use Alister\Todotxt\Parser\TodoCounting;
 use Alister\Todotxt\Parser\TodoItem;
+use Alister\Todotxt\Parser\TodoPriority;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(TodoCounting::class)]
+#[CoversClass(TodoItem::class)]
+#[CoversClass(TodoPriority::class)]
 final class TodoCountingTest extends TestCase
 {
     /**
      * @var array<string, int>
      */
-    private const SAMPLE_TAG_COUNTS = [
+    private const array SAMPLE_TAG_COUNTS = [
         'tag-a' => 10,
         'tag-b' => 20,
         'tag-c' => 30,

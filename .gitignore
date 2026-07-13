@@ -6,4 +6,5 @@ phpunit.xml
 vendor/
 yarn.lock
 
-tools/rector/vendor/
+.phpunit.result.cache
+.phpunit.cache/

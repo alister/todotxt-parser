@@ -25,23 +25,27 @@ namespace Alister\Test\Todotxt\Parser;
 use Alister\Todotxt\Parser\Exceptions\UnknownPriorityValue;
 use Alister\Todotxt\Parser\Parser;
 use Alister\Todotxt\Parser\TodoItem;
+use Alister\Todotxt\Parser\TodoPriority;
 use DateTimeImmutable;
 use Generator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(Parser::class)]
+#[CoversClass(TodoItem::class)]
+#[CoversClass(TodoPriority::class)]
 final class ParserTest extends TestCase
 {
-    /** @var string */
-    private const TODO_TEXT = 'text';
+    private const string TODO_TEXT = 'text';
 
     /**
      * @param string[] $tags
      * @param string[] $context
      *
      * @throws UnknownPriorityValue
-     *
-     * @dataProvider dpParseTodoLine
      */
+    #[DataProvider('dpParseTodoLine')]
     public function testParse(string $todoText, TodoItem $expectedItem, array $tags = [], array $context = []): void
     {
         $parser = new Parser();
@@ -50,7 +54,7 @@ final class ParserTest extends TestCase
 
         $todoItem = $parser->parse($todoText);
 
-        $this->assertNotNull($todoItem);
+        $this->assertInstanceOf(TodoItem::class, $todoItem);
         $this->assertEquals($expectedItem, $todoItem);
         $this->assertEquals($tags, $todoItem->getTags());
         $this->assertEquals($context, $todoItem->getContext());
@@ -60,13 +64,15 @@ final class ParserTest extends TestCase
     }
 
     /**
+     * @return Generator<array<int, (TodoItem | array<int, string> | string)>>
+     *
      * @throws UnknownPriorityValue
      */
-    public function dpParseTodoLine(): Generator
+    public static function dpParseTodoLine(): Generator
     {
         $created = new DateTimeImmutable('2020-01-31');
         $completion = new DateTimeImmutable('2020-02-01');
-        $expected = new TodoItem(text: 'text', priority: '', created: null, completion: null, done: false);
+        $expected = new TodoItem(text: 'text', priority: '', done: false);
 
         yield self::TODO_TEXT => [self::TODO_TEXT, $expected];
 
@@ -81,27 +87,27 @@ final class ParserTest extends TestCase
         yield $str => [$str, $todoItem];
 
         $str = 'x 2020-01-31 text';
-        $todoItem = new TodoItem('text', '', $created, null, true);
+        $todoItem = new TodoItem('text', '', $created, done: true);
 
         yield $str => [$str, $todoItem];
 
         $str = 'x (Z) 2020-01-31 text';
-        $todoItem = new TodoItem('text', 'Z', $created, null, true);
+        $todoItem = new TodoItem('text', 'Z', $created, done: true);
 
         yield $str => [$str, $todoItem];
 
         $str = 'x 2020-02-01 2020-01-31 text';
-        $todoItem = new TodoItem('text', '', $created, $completion, true);
+        $todoItem = new TodoItem('text', '', $created, $completion, done: true);
 
         yield $str => [$str, $todoItem];
 
         $str = 'x (F) 2020-02-01 2020-01-31 text';
-        $todoItem = new TodoItem('text', 'F', $created, $completion, true);
+        $todoItem = new TodoItem('text', 'F', $created, $completion, done: true);
 
         yield $str => [$str, $todoItem];
 
         $str = 'x (F) 2020-02-01 2020-01-31 text +tag +tag2 @context1 @context2';
-        $todoItem = new TodoItem('text +tag +tag2 @context1 @context2', 'F', $created, $completion, true);
+        $todoItem = new TodoItem('text +tag +tag2 @context1 @context2', 'F', $created, $completion, done: true);
 
         yield $str => [$str, $todoItem, ['tag','tag2'], ['context1','context2']];
     }

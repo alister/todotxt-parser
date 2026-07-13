@@ -10,15 +10,14 @@ use Stringable;
 /**
  * @see \Alister\Test\Todotxt\Parser\TodoPriorityTest
  */
-final class TodoPriority implements Stringable
+final readonly class TodoPriority implements Stringable
 {
     /**
      * @See https://regex101.com/r/SZr0X5/13 Allows 'A'-'Z', or '(A)'-'(Z)' all with lower-case.
-     * @var string
      */
-    private const VALID_PRIORITIES = '#^\(?([A-Z])\)?$#i';
+    private const string VALID_PRIORITIES = '#^\(?([A-Z])\)?$#i';
 
-    private readonly string $priority;
+    private string $priority;
 
     /**
      * @throws UnknownPriorityValue

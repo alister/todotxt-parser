@@ -34,28 +34,22 @@ final class Parser
 {
     /**
      * @See https://regex101.com/r/SZr0X5/14
-     * @var string
      */
-    private const REGEX_PRIORITY_MATCH = '#\(([a-zA-Z])\) #';
+    private const string REGEX_PRIORITY_MATCH = '#\(([a-zA-Z])\) #';
 
     /**
      * @See https://regex101.com/r/SZr0X5/15 matching date-like things (yyyy-mm-dd)
-     * @var string
      */
-    private const REGEX_DATES_MATCH = '#(?:(?:19|20)\d\d)-(?:0?[1-9]|1[012])-(?:[12][\d]|3[01]|0?[1-9])#';
+    private const string REGEX_DATES_MATCH = '#(?:(?:19|20)\d\d)-(?:0?[1-9]|1[012])-(?:[12][\d]|3[01]|0?[1-9])#';
 
     private string $todoLine = '';
-
-    public function __construct()
-    {
-    }
 
     /**
      * @throws UnknownPriorityValue
      */
     public static function create(string $todoLine = ''): ?TodoItem
     {
-        return (new self())->parse($todoLine);
+        return new self()->parse($todoLine);
     }
 
     /**

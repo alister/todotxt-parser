@@ -18,6 +18,7 @@ use function Symfony\Component\String\s;
 final class TodoItem implements Stringable, JsonSerializable
 {
     private AbstractString $text;
+
     private readonly TodoPriority $todoPriority;
 
     /**
@@ -49,6 +50,7 @@ final class TodoItem implements Stringable, JsonSerializable
         } else {
             $this->text = s($text);
         }
+
         $this->todoPriority = new TodoPriority($priority);
 
         $this->parseTags($this->text);
@@ -59,7 +61,7 @@ final class TodoItem implements Stringable, JsonSerializable
     {
         $arr = array_filter(
             $this->jsonSerialize(),
-            static fn($x): bool => $x !== null && $x !== ''
+            static fn(string|AbstractString|null $x): bool => $x !== null && $x !== ''
         );
 
         return implode(' ', $arr);
